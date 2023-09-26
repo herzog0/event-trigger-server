@@ -1,6 +1,7 @@
 {
   "name": "event-trigger-server",
   "author": "Teodoro B. Mendes",
+  "description": "Listen and deliver your database events in realtime to any endpoint",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
