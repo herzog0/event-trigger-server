@@ -9,13 +9,12 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "axios": "^1.5.1",
     "dotenv": "^16.3.1",
-    "node-fetch": "^3.3.2",
     "pg": "^8.11.3"
   },
   "devDependencies": {
     "@types/node": "^20.7.0",
-    "@types/node-fetch": "^2.6.6",
     "@types/pg": "^8.10.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2"

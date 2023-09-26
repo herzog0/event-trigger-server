@@ -1,9 +1,7 @@
-import {RequestInfo, RequestInit} from "node-fetch";
+import axios from "axios"
 import client from "./db";
 import env from "./env"
 import {EventPayload, EventQueue, ListenerPayload} from "./types";
-
-const fetch = (url: RequestInfo, init?: RequestInit) =>  import("node-fetch").then(({ default: fetch }) => fetch(url, init));
 
 export async function postEventToSqs(payload: ListenerPayload<EventQueue>) {
   console.log(`Posting event ${payload.data.event_id} into SQS`)
@@ -21,19 +19,22 @@ export async function postEventToSqs(payload: ListenerPayload<EventQueue>) {
     return
   }
 
-  const response = await fetch(env.DELIVERY_URL, {
-    method: "POST",
+  const response = await axios.post(env.DELIVERY_URL, {
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(loggedActionData),
+  }, {
+    validateStatus: () => true
   })
 
-  if (!response.ok) {
+  const ok = 200 <= response.status && response.status <= 299
+
+  if (!ok) {
     throw new Error(JSON.stringify({
       status: response.statusText,
       code: response.status,
-      error: response.body,
+      data: response.data,
       eventId: payload.data.event_id
     }))
   }
