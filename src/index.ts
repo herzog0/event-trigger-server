@@ -1,5 +1,6 @@
 import client from "./db";
 import {eventProcessor} from "./event-processor";
+import "./health"
 import {postEventToSqs} from "./post-event-to-sqs";
 import {setupEventQueueListener} from "./pubsub";
 import {initialize} from "./startup";
