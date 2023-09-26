@@ -23,7 +23,7 @@ export async function postEventToSqs(payload: ListenerPayload<EventQueue>) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(loggedActionData),
+    body: loggedActionData,
   }, {
     validateStatus: () => true
   })
