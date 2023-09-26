@@ -1,6 +1,9 @@
+import {RequestInfo, RequestInit} from "node-fetch";
 import client from "./db";
 import env from "./env"
 import {EventPayload, EventQueue, ListenerPayload} from "./types";
+
+const fetch = (url: RequestInfo, init?: RequestInit) =>  import("node-fetch").then(({ default: fetch }) => fetch(url, init));
 
 export async function postEventToSqs(payload: ListenerPayload<EventQueue>) {
   console.log(`Posting event ${payload.data.event_id} into SQS`)
