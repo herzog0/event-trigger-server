@@ -1,10 +1,21 @@
 import {createServer, IncomingMessage, Server, ServerResponse} from "http"
+import client from "./db";
 import env from "./env";
 
-const server: Server = createServer((req: IncomingMessage, res: ServerResponse) => {
+async function isConnected(): Promise<boolean> {
+  try {
+    await client.query('SELECT 1');
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+const server: Server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
   if (req.url === '/health') {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('healthy');
+    const hasDbConnection = await isConnected()
+    res.writeHead(hasDbConnection ? 200 : 500, {'Content-Type': 'text/plain'});
+    res.end(hasDbConnection ? 'healthy' : 'unhealthy');
   } else {
     res.writeHead(404, {'Content-Type': 'text/plain'});
     res.end('Not Found');
