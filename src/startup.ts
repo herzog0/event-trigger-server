@@ -4,10 +4,12 @@ import {EventQueue, ListenerPayload} from "./types";
 async function getNextUnprocessedEvent() {
   const result = await client.query(`
       UPDATE audit.event_queue
-      SET attempts = attempts + 1
+      SET attempts    = attempts + 1,
+          retry_after = now() + ((attempts + 1)::TEXT || ' minutes')::INTERVAL
       WHERE event_id = (SELECT event_id
                         FROM audit.event_queue
                         WHERE processed = false
+                          AND (retry_after IS NULL OR retry_after < now())
                         ORDER BY event_id
                             FOR UPDATE SKIP LOCKED
                         LIMIT 1)

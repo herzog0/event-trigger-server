@@ -28,7 +28,8 @@ export type EventQueue = {
   created_at: string
   event_id: number
   processed: boolean
-  attempts: boolean
+  attempts: number
+  retry_after: string | null
   processed_at: string | null
 }
 
