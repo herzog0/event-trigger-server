@@ -19,12 +19,7 @@ export async function postEventToSqs(payload: ListenerPayload<EventQueue>) {
     return
   }
 
-  const response = await axios.post(env.DELIVERY_URL, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: loggedActionData,
-  }, {
+  const response = await axios.post(env.DELIVERY_URL, loggedActionData, {
     validateStatus: () => true
   })
 
