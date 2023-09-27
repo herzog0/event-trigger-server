@@ -1,10 +1,10 @@
 import axios from "axios"
-import client from "./db";
-import env from "./env"
-import {EventPayload, EventQueue, ListenerPayload} from "./types";
+import client from "../db";
+import env from "../env"
+import {EventPayload, EventQueue, ListenerPayload} from "../types";
 
-export async function postEventToSqs(payload: ListenerPayload<EventQueue>) {
-  console.log(`Posting event ${payload.data.event_id} into SQS`)
+export async function deliverToEndpoint(payload: ListenerPayload<EventQueue>) {
+  console.log(`Delivering event ${payload.data.event_id} to configured endpoint`)
 
   const result = await client.query(`
       select event_id, action, row_data, changed_fields, table_name

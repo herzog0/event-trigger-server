@@ -10,7 +10,7 @@ async function getNextUnprocessedEvent() {
                         FROM audit.event_queue
                         WHERE processed = false
                           AND (retry_after IS NULL OR retry_after < now())
-                        ORDER BY event_id
+                        ORDER BY attempts, event_id
                             FOR UPDATE SKIP LOCKED
                         LIMIT 1)
       RETURNING *;

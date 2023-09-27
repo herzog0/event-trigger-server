@@ -39,7 +39,7 @@ $ npm run build && npm run start
 
 ## Roadmap
 
-- [ ] Concurrent servers
+- [X] Concurrent servers
 - [ ] Fix race condition between the server initialization and the start of the listener
 - [ ] Take connections from a connection pool
 - [ ] Web interface

@@ -24,6 +24,10 @@ export type ListenerPayload<T> = {
   data: T
 }
 
+export type SummarizedEvent = {
+  event_id: number
+}
+
 export type EventQueue = {
   created_at: string
   event_id: number

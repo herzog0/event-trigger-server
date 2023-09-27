@@ -34,7 +34,7 @@ async function createNotifyChangeTrigger() {
     `)
     await client.query(`
     CREATE TRIGGER queue_updated
-      AFTER INSERT OR UPDATE OR DELETE ON audit.event_queue
+      AFTER INSERT ON audit.event_queue
       FOR EACH ROW EXECUTE FUNCTION audit.notify_change();
     `)
   } catch (e) {
@@ -50,13 +50,11 @@ export async function setupEventQueueListener(cb: (e: ListenerPayload<EventQueue
   await createNotifyChangeFunction()
   await createNotifyChangeTrigger()
 
-  console.log("Subscribing to events")
-  client.on('notification', async (message) => {
-
+  client.on("notification", async (message) => {
     const payload: ListenerPayload<EventQueue> = JSON.parse(message.payload!);
     await cb(payload);
   });
 
-  console.log("Querying LISTEN statement")
   await client.query('LISTEN record_change');
+  console.log("Subscribed to messages in 'record_change' channel")
 }
