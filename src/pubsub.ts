@@ -4,7 +4,7 @@ import {EventQueue, ListenerPayload} from "./types";
 
 async function createNotifyChangeFunction() {
   await client.query(`
-  CREATE OR REPLACE FUNCTION notify_change() RETURNS trigger AS $$
+  CREATE OR REPLACE FUNCTION audit.notify_change() RETURNS trigger AS $$
 DECLARE
     payload JSON;
 BEGIN
@@ -35,7 +35,7 @@ async function createNotifyChangeTrigger() {
     await client.query(`
     CREATE TRIGGER queue_updated
       AFTER INSERT OR UPDATE OR DELETE ON audit.event_queue
-      FOR EACH ROW EXECUTE FUNCTION notify_change();
+      FOR EACH ROW EXECUTE FUNCTION audit.notify_change();
     `)
   } catch (e) {
     if (isPostgresError(e) && e.code === DUPLICATE_OBJECT_ERROR_CODE) {

@@ -4,7 +4,7 @@ import env from "./env";
 
 async function isConnected(): Promise<boolean> {
   try {
-    await client.query('SELECT 1');
+    await client.query('SELECT * FROM audit.event_queue LIMIT 1;');
     return true;
   } catch (error) {
     return false;
@@ -16,6 +16,9 @@ const server: Server = createServer(async (req: IncomingMessage, res: ServerResp
     const hasDbConnection = await isConnected()
     res.writeHead(hasDbConnection ? 200 : 500, {'Content-Type': 'text/plain'});
     res.end(hasDbConnection ? 'healthy' : 'unhealthy');
+    if (!hasDbConnection) {
+      process.exit(1)
+    }
   } else {
     res.writeHead(404, {'Content-Type': 'text/plain'});
     res.end('Not Found');
